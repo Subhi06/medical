@@ -21,6 +21,22 @@ body {
     max-width: 600px;
     width: 100%;
     padding: 40px;
+    animation: fadeIn 0.5s;
+}
+
+.admin-container {
+    max-width: 900px;
+}
+
+@keyframes fadeIn {
+    from { 
+        opacity: 0; 
+        transform: translateY(20px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
 }
 
 .logo {
@@ -37,26 +53,6 @@ body {
 .logo p {
     color: #666;
     font-size: 14px;
-}
-
-.page {
-    display: none;
-}
-
-.page.active {
-    display: block;
-    animation: fadeIn 0.5s;
-}
-
-@keyframes fadeIn {
-    from { 
-        opacity: 0; 
-        transform: translateY(20px); 
-    }
-    to { 
-        opacity: 1; 
-        transform: translateY(0); 
-    }
 }
 
 .login-form {
@@ -171,10 +167,6 @@ body {
 .score-item .score {
     font-size: 36px;
     font-weight: bold;
-}
-
-.admin-panel {
-    max-width: 800px;
 }
 
 .admin-header {
@@ -313,6 +305,7 @@ body {
     display: flex;
     gap: 15px;
     margin-top: 10px;
+    flex-wrap: wrap;
 }
 
 .result-scores span {
@@ -320,16 +313,6 @@ body {
     padding: 8px 12px;
     border-radius: 5px;
     font-weight: 600;
-    color: #667eea;
-}
-
-.hidden {
-    display: none;
-}
-
-.loading {
-    text-align: center;
-    padding: 20px;
     color: #667eea;
 }
 
@@ -357,6 +340,15 @@ body {
     }
 
     .admin-header .btn {
+        width: 100%;
+    }
+
+    .question-item {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .btn-delete {
         width: 100%;
     }
 }
