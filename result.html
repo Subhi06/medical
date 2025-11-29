@@ -1,64 +1,15 @@
 <!DOCTYPE html>
-<html lang="ta">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Results - Ayurveda Body Type Assessment</title>
-    <link rel="stylesheet" href="style.css">
+  <title>Result</title>
 </head>
 <body>
-    <div class="container">
-        <div class="result-card">
-            <h2>உங்கள் முடிவு</h2>
-            <div class="score-breakdown">
-                <div class="score-item">
-                    <h4>வாதம்</h4>
-                    <div class="score" id="scoreA">0</div>
-                </div>
-                <div class="score-item">
-                    <h4>பித்தம்</h4>
-                    <div class="score" id="scoreB">0</div>
-                </div>
-                <div class="score-item">
-                    <h4>கபம்</h4>
-                    <div class="score" id="scoreC">0</div>
-                </div>
-            </div>
-            <h3 id="dominantType" style="margin-top: 20px; font-size: 24px;"></h3>
-        </div>
-        <button class="btn btn-primary" onclick="retakeQuiz()">மீண்டும் எடுக்க</button>
-        <button class="btn btn-secondary" onclick="logout()">வெளியேறு</button>
-    </div>
+  <h2>Your Result</h2>
+  <p id="resultText"></p>
 
-    <script type="module">
-        // Check if user is logged in
-        const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
-        if (!currentUser.name) {
-            window.location.href = 'login.html';
-        }
-
-        // Get results from localStorage
-        const results = JSON.parse(localStorage.getItem('quizResults') || '{}');
-        
-        if (results.scoreA !== undefined) {
-            document.getElementById('scoreA').textContent = results.scoreA;
-            document.getElementById('scoreB').textContent = results.scoreB;
-            document.getElementById('scoreC').textContent = results.scoreC;
-            document.getElementById('dominantType').textContent = results.dominant;
-        } else {
-            window.location.href = 'quiz.html';
-        }
-
-        window.retakeQuiz = () => {
-            localStorage.removeItem('quizResults');
-            window.location.href = 'quiz.html';
-        };
-
-        window.logout = () => {
-            localStorage.removeItem('currentUser');
-            localStorage.removeItem('quizResults');
-            window.location.href = 'login.html';
-        };
-    </script>
+  <script>
+    const result = localStorage.getItem('result');
+    document.getElementById('resultText').innerText = `உங்கள் தேகி வகை: ${result}`;
+  </script>
 </body>
 </html>

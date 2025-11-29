@@ -1,22 +1,64 @@
 <!DOCTYPE html>
-<html lang="ta">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz - Ayurveda Body Type Assessment</title>
-    <link rel="stylesheet" href="style.css">
+  <title>Quiz</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="firebase.js"></script>
 </head>
 <body>
-    <div class="container">
-        <div class="logo">
-            <h1>உடல் வகை மதிப்பீடு</h1>
-            <p id="userName"></p>
-        </div>
-        <div id="questionsContainer"></div>
-        <button class="btn btn-primary" onclick="submitQuiz()">முடிவை காண்க</button>
-        <button class="btn btn-secondary" onclick="logout()">வெளியேறு</button>
-    </div>
+  <h2>Quiz</h2>
+  <form id="quizForm">
+    <div id="questionsContainer"></div>
+    <button type="submit">Submit</button>
+  </form>
 
-    <script type="module" src="quiz.js"></script>
+  <script>
+    const username = localStorage.getItem('username');
+    const age = localStorage.getItem('age');
+
+    // Load questions from Firestore
+    const questionsContainer = document.getElementById('questionsContainer');
+    db.collection('questions').get().then(snapshot => {
+      snapshot.docs.forEach((doc, index) => {
+        const q = doc.data();
+        questionsContainer.innerHTML += `
+          <div>
+            <p>${index+1}) ${q.question}</p>
+            <input type="radio" name="q${index}" value="a" required> ${q.optionA} <br>
+            <input type="radio" name="q${index}" value="b"> ${q.optionB} <br>
+            <input type="radio" name="q${index}" value="c"> ${q.optionC} <br>
+          </div>
+          <hr>
+        `;
+      });
+    });
+
+    document.getElementById('quizForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const answers = {};
+      const formData = new FormData(e.target);
+      for (const pair of formData.entries()) {
+        answers[pair[0]] = pair[1];
+      }
+
+      // Calculate result
+      let counts = { a: 0, b: 0, c: 0 };
+      Object.values(answers).forEach(v => counts[v]++);
+
+      let result = counts.a >= counts.b && counts.a >= counts.c ? 'வாத தேகி' :
+                   counts.b >= counts.a && counts.b >= counts.c ? 'பித்த தேகி' : 'கப தேகி';
+
+      await db.collection('results').add({
+        name: username,
+        age: age,
+        answers: answers,
+        result: result,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+      });
+
+      localStorage.setItem('result', result);
+      window.location.href = 'result.html';
+    });
+  </script>
 </body>
 </html>
