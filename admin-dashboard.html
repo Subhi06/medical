@@ -116,7 +116,14 @@
             const tbody = document.getElementById('responsesTableBody');
             tbody.innerHTML = '';
 
-            Object.entries(filteredResponses).forEach(([userId, response]) => {
+            // Sort responses by timestamp (latest first)
+            const sortedResponses = Object.entries(filteredResponses).sort((a, b) => {
+                const timeA = new Date(a[1].userInfo?.timestamp || 0).getTime();
+                const timeB = new Date(b[1].userInfo?.timestamp || 0).getTime();
+                return timeB - timeA; // Descending order (latest first)
+            });
+
+            sortedResponses.forEach(([userId, response]) => {
                 // Check if response has required data
                 if (!response || !response.userInfo || !response.results) {
                     return; // Skip invalid responses
